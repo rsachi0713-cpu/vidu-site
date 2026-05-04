@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MR VIDU | Admin Panel</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+  
+  <style>
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+      background: #000;
+      padding: 0;
+    }
+    
+    .sidebar {
+      width: 280px;
+      background: #0a0a0a;
+      border-right: 1px solid #1a1a1a;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .sidebar-logo {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .menu-item {
+      padding: 15px;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: var(--transition);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    
+    .menu-item:hover, .menu-item.active {
+      background: rgba(255, 0, 0, 0.1);
+      color: var(--primary-color);
+      border-color: rgba(255, 0, 0, 0.2);
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 50px;
+      overflow-y: auto;
+    }
+    
+    .cms-card {
+      background: #0a0a0a;
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid #1a1a1a;
+      margin-bottom: 30px;
+    }
+    
+    .cms-card h3 {
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 15px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #222;
+      padding: 12px 15px;
+      border-radius: 8px;
+      color: white;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+    
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      background: #161616;
+    }
+    
+    .full-width {
+      grid-column: span 2;
+    }
+    
+    .btn-save {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .btn-save:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--accent-glow);
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #25D366;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 3000;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    
+    /* Login Page Overlay */
+    #login-page {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    
+    .login-box {
+      background: #0a0a0a;
+      padding: 50px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #1a1a1a;
+      text-align: center;
+    }
+    
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Success Notification -->
+  <div id="notification" class="notification">
+    <i class="fas fa-check-circle"></i> Changes Saved Successfully!
+  </div>
+
+  <!-- Login Section -->
+  <div id="login-page">
+    <div class="login-box">
+      <div class="logo" style="margin-bottom: 30px;">MR <span>VIDU</span></div>
+      <h2 style="margin-bottom: 30px;">Admin <span class="text-red">Access</span></h2>
+      <form onsubmit="event.preventDefault(); document.getElementById('login-page').classList.add('hidden');">
+        <div class="form-group">
+          <input type="text" placeholder="Admin Username" value="admin" required>
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Password" value="admin123" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Enter Admin Panel</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">MR <span class="text-red">VIDU</span></div>
+      <div class="sidebar-menu">
+        <div class="menu-item" onclick="showTab('channels')"><i class="fab fa-youtube"></i> YouTube Channels</div>
+        <div class="menu-item" onclick="showTab('socials')"><i class="fas fa-share-alt"></i> Social Networks</div>
+        <div class="menu-item" onclick="showTab('services')"><i class="fas fa-concierge-bell"></i> Services</div>
+        <div class="menu-item" onclick="showTab('about')"><i class="fas fa-user-edit"></i> About Section</div>
+        <div class="menu-item" onclick="showTab('portfolio')"><i class="fas fa-briefcase"></i> Portfolio</div>
+        <div class="menu-item" onclick="showTab('contact')"><i class="fas fa-envelope"></i> Contact Info</div>
+        <a href="index.html" class="menu-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div id="tab-services" class="tab-content hidden">
+        <h2 style="margin-bottom: 30px;">Services <span class="text-red">Management</span></h2>
+        
+        <div id="services-items">
+          <!-- Service Item 1 -->
+          <div class="cms-card service-cms-item" data-id="1">
+            <h3>Service Item 1</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="service-title" value="Music Promotion">
+              </div>
+              <div class="form-group">
+                <label>Icon Class (FontAwesome)</label>
+                <input type="text" class="service-icon" value="fas fa-music">
+              </div>
+              <div class="form-group full-width">
+                <label>Short Description</label>
+                <textarea class="service-desc" rows="2">Helping artists reach their target audience through strategic digital campaigns.</textarea>
+              </div>
+              <div class="form-group full-width">
+                <label>Full Service Details (Opens in Modal)</label>
+                <textarea class="service-full-desc" rows="5">This is the complete description of our Music Promotion service. We use high-impact digital marketing, audience targeting, and data-driven strategies to ensure your music reaches the right listeners.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service Item 2 -->
+          <div class="cms-card service-cms-item" data-id="2">
+            <h3>Service Item 2</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="service-title" value="Band Promotion">
+              </div>
+              <div class="form-group">
+                <label>Icon Class (FontAwesome)</label>
+                <input type="text" class="service-icon" value="fas fa-users">
+              </div>
+              <div class="form-group full-width">
+                <label>Short Description</label>
+                <textarea class="service-desc" rows="2">Connecting bands with fans and venues to boost their visibility and bookings.</textarea>
+              </div>
+              <div class="form-group full-width">
+                <label>Full Service Details (Opens in Modal)</label>
+                <textarea class="service-full-desc" rows="5">We specialize in connecting bands with venues and building a dedicated fanbase through social media management, event promotion, and strategic networking.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service Item 3 -->
+          <div class="cms-card service-cms-item" data-id="3">
+            <h3>Service Item 3</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="service-title" value="Content Creation">
+              </div>
+              <div class="form-group">
+                <label>Icon Class (FontAwesome)</label>
+                <input type="text" class="service-icon" value="fas fa-video">
+              </div>
+              <div class="form-group full-width">
+                <label>Short Description</label>
+                <textarea class="service-desc" rows="2">Producing engaging video and visual content for YouTube and social media.</textarea>
+              </div>
+              <div class="form-group full-width">
+                <label>Full Service Details (Opens in Modal)</label>
+                <textarea class="service-full-desc" rows="5">Our content creation team produces high-quality video vlogs, music videos, and social media shorts tailored to your brand identity and audience preferences.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service Item 4 -->
+          <div class="cms-card service-cms-item" data-id="4">
+            <h3>Service Item 4</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="service-title" value="Social Media Growth">
+              </div>
+              <div class="form-group">
+                <label>Icon Class (FontAwesome)</label>
+                <input type="text" class="service-icon" value="fas fa-chart-line">
+              </div>
+              <div class="form-group full-width">
+                <label>Short Description</label>
+                <textarea class="service-desc" rows="2">Organic growth strategies to build a loyal and active following.</textarea>
+              </div>
+              <div class="form-group full-width">
+                <label>Full Service Details (Opens in Modal)</label>
+                <textarea class="service-full-desc" rows="5">We provide organic social media growth strategies, including engagement optimization, hashtag research, and consistent brand storytelling to build a loyal and active following.</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="saveServices()">
+          <i class="fas fa-save"></i> Save Services Settings
+        </button>
+      </div>
+
+      <div id="tab-socials" class="tab-content hidden">
+        <h2 style="margin-bottom: 30px;">Social <span class="text-red">Networks</span></h2>
+        
+        <!-- Facebook -->
+        <div class="cms-card">
+          <h3><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" id="fb-name" value="Facebook Page">
+            </div>
+            <div class="form-group">
+              <label>Followers Count</label>
+              <input type="text" id="fb-subs" value="10K+ Followers">
+            </div>
+            <div class="form-group full-width">
+              <label>Profile Link</label>
+              <input type="text" id="fb-link" value="#">
+            </div>
+          </div>
+        </div>
+
+        <!-- Instagram -->
+        <div class="cms-card">
+          <h3><i class="fab fa-instagram" style="color: #E4405F;"></i> Instagram</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" id="ig-name" value="Instagram">
+            </div>
+            <div class="form-group">
+              <label>Followers Count</label>
+              <input type="text" id="ig-subs" value="20K+ Followers">
+            </div>
+            <div class="form-group full-width">
+              <label>Profile Link</label>
+              <input type="text" id="ig-link" value="#">
+            </div>
+          </div>
+        </div>
+
+        <!-- TikTok -->
+        <div class="cms-card">
+          <h3><i class="fab fa-tiktok" style="color: #fff;"></i> TikTok</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" id="tt-name" value="TikTok">
+            </div>
+            <div class="form-group">
+              <label>Followers Count</label>
+              <input type="text" id="tt-subs" value="150K+ Followers">
+            </div>
+            <div class="form-group full-width">
+              <label>Profile Link</label>
+              <input type="text" id="tt-link" value="#">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="saveSocials()">
+          <i class="fas fa-save"></i> Save Social Settings
+        </button>
+      </div>
+
+      <div id="tab-channels" class="tab-content">
+        <h2 style="margin-bottom: 30px;">YouTube <span class="text-red">Channels</span></h2>
+        
+        <!-- Channel 1 -->
+        <div class="cms-card">
+          <h3><i class="fab fa-youtube text-red"></i> Channel 1 (VIDU)</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Channel Name</label>
+              <input type="text" id="ch1-name" value="VIDU">
+            </div>
+            <div class="form-group">
+              <label>Subscribers Count</label>
+              <input type="text" id="ch1-subs" value="450K+ Subscribers">
+            </div>
+            <div class="form-group full-width">
+              <label>YouTube Link</label>
+              <input type="text" id="ch1-link" value="https://youtube.com/@vidu_roasting">
+            </div>
+            <div class="form-group">
+              <label>Channel Logo</label>
+              <input type="file" id="ch1-file" accept="image/*" onchange="previewImage(1)">
+              <input type="hidden" id="ch1-logo" value="https://yt3.googleusercontent.com/r9PZb3f7BXZFdAvU_r1dRa0vHsfPuXvIYTCwOeK4qZsMMkGkKwHP1-iW27gXQHMZhxgeIq7U=s900-c-k-c0x00ffffff-no-rj">
+            </div>
+            <div class="form-group">
+              <img id="ch1-preview" src="https://yt3.googleusercontent.com/r9PZb3f7BXZFdAvU_r1dRa0vHsfPuXvIYTCwOeK4qZsMMkGkKwHP1-iW27gXQHMZhxgeIq7U=s900-c-k-c0x00ffffff-no-rj" style="height: 60px; border-radius: 50%; border: 1px solid #333;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Channel 2 -->
+        <div class="cms-card">
+          <h3><i class="fab fa-youtube text-red"></i> Channel 2 (MR VIDU)</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Channel Name</label>
+              <input type="text" id="ch2-name" value="MR VIDU">
+            </div>
+            <div class="form-group">
+              <label>Subscribers Count</label>
+              <input type="text" id="ch2-subs" value="100K+ Subscribers">
+            </div>
+            <div class="form-group full-width">
+              <label>YouTube Link</label>
+              <input type="text" id="ch2-link" value="https://youtube.com/@mr_viduu?si=tw1b8lINX0w2SdQU">
+            </div>
+            <div class="form-group">
+              <label>Channel Logo</label>
+              <input type="file" id="ch2-file" accept="image/*" onchange="previewImage(2)">
+              <input type="hidden" id="ch2-logo" value="https://yt3.googleusercontent.com/qXMySQnjHSsQu91QZQGeQuLuUjgbqAm8V_aoYvi77qSum3HR2N1rmrnWZNg99iXKiIiyZoGoBQ=s900-c-k-c0x00ffffff-no-rj">
+            </div>
+            <div class="form-group">
+              <img id="ch2-preview" src="https://yt3.googleusercontent.com/qXMySQnjHSsQu91QZQGeQuLuUjgbqAm8V_aoYvi77qSum3HR2N1rmrnWZNg99iXKiIiyZoGoBQ=s900-c-k-c0x00ffffff-no-rj" style="height: 60px; border-radius: 50%; border: 1px solid #333;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Channel 3 -->
+        <div class="cms-card">
+          <h3><i class="fab fa-youtube text-red"></i> Channel 3 (VIDU VLOGS)</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Channel Name</label>
+              <input type="text" id="ch3-name" value="VIDU VLOGS">
+            </div>
+            <div class="form-group">
+              <label>Subscribers Count</label>
+              <input type="text" id="ch3-subs" value="90K+ Subscribers">
+            </div>
+            <div class="form-group full-width">
+              <label>YouTube Link</label>
+              <input type="text" id="ch3-link" value="https://youtube.com/@vidu_vlogss?si=6pRPR0i5AItrUpMM">
+            </div>
+            <div class="form-group">
+              <label>Channel Logo</label>
+              <input type="file" id="ch3-file" accept="image/*" onchange="previewImage(3)">
+              <input type="hidden" id="ch3-logo" value="vidu_vlogs_logo.jpg">
+            </div>
+            <div class="form-group">
+              <img id="ch3-preview" src="vidu_vlogs_logo.jpg" style="height: 60px; border-radius: 50%; border: 1px solid #333;">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="saveChannels()">
+          <i class="fas fa-save"></i> Save Channel Settings
+        </button>
+      </div>
+
+      <div id="tab-about" class="tab-content hidden">
+        <h2 style="margin-bottom: 30px;">About <span class="text-red">Section</span></h2>
+        
+        <div class="cms-card">
+          <h3><i class="fas fa-info-circle text-red"></i> Edit Biography</h3>
+          <div class="form-group">
+            <label>Heading</label>
+            <input type="text" id="about-heading" value="About MR VIDU">
+          </div>
+          <div class="form-group">
+            <label>Bio Paragraph 1</label>
+            <textarea id="about-p1" rows="4">I am a passionate Music Artist, dedicated Band Promoter, and creative Content Creator. With a vision to redefine digital presence, I specialize in building brands and fostering communities across various platforms.</textarea>
+          </div>
+          <div class="form-group">
+            <label>Bio Paragraph 2</label>
+            <textarea id="about-p2" rows="4">My journey is driven by creativity and a commitment to professional excellence in every project I undertake. I believe in the power of visual storytelling and high-impact digital marketing.</textarea>
+          </div>
+        </div>
+
+        <div class="cms-card">
+          <h3><i class="fas fa-chart-bar text-red"></i> Edit Stats</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Projects Done (Count)</label>
+              <input type="text" id="stat-projects" value="100+">
+            </div>
+            <div class="form-group">
+              <label>Global Fans (Count)</label>
+              <input type="text" id="stat-fans" value="500K+">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="saveAbout()">
+          <i class="fas fa-save"></i> Save About Settings
+        </button>
+      </div>
+      <div id="tab-portfolio" class="tab-content hidden">
+        <h2 style="margin-bottom: 30px;">Portfolio <span class="text-red">Management</span></h2>
+        
+        <div id="portfolio-items">
+          <!-- Portfolio Items will be loaded here if multiple, but we start with 3 placeholders -->
+          <div class="cms-card portfolio-cms-item" data-id="1">
+            <h3>Portfolio Item 1</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="port-title" value="Music Production">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select class="port-category" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
+                  <option value="music">Music</option>
+                  <option value="videos">Videos</option>
+                  <option value="promotions">Promotions</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label>Link (URL)</label>
+                <input type="text" class="port-link" value="#">
+              </div>
+              <div class="form-group">
+                <label>Image</label>
+                <input type="file" class="port-file" accept="image/*" onchange="previewPortfolioImage(this)">
+                <input type="hidden" class="port-img-data" value="music_promotion_thumb.png">
+              </div>
+              <div class="form-group">
+                <img class="port-preview" src="music_promotion_thumb.png" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="cms-card portfolio-cms-item" data-id="2">
+            <h3>Portfolio Item 2</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="port-title" value="Content Creation">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select class="port-category" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
+                  <option value="videos" selected>Videos</option>
+                  <option value="music">Music</option>
+                  <option value="promotions">Promotions</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label>Link (URL)</label>
+                <input type="text" class="port-link" value="#">
+              </div>
+              <div class="form-group">
+                <label>Image</label>
+                <input type="file" class="port-file" accept="image/*" onchange="previewPortfolioImage(this)">
+                <input type="hidden" class="port-img-data" value="content_creation_thumb.png">
+              </div>
+              <div class="form-group">
+                <img class="port-preview" src="content_creation_thumb.png" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="cms-card portfolio-cms-item" data-id="3">
+            <h3>Portfolio Item 3</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="port-title" value="Band Promotion">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select class="port-category" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
+                  <option value="promotions" selected>Promotions</option>
+                  <option value="music">Music</option>
+                  <option value="videos">Videos</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label>Link (URL)</label>
+                <input type="text" class="port-link" value="#">
+              </div>
+              <div class="form-group">
+                <label>Image</label>
+                <input type="file" class="port-file" accept="image/*" onchange="previewPortfolioImage(this)">
+                <input type="hidden" class="port-img-data" value="music_promotion_thumb.png">
+              </div>
+              <div class="form-group">
+                <img class="port-preview" src="music_promotion_thumb.png" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="savePortfolio()">
+          <i class="fas fa-save"></i> Save Portfolio Settings
+        </button>
+      </div>
+      <div id="tab-contact" class="tab-content hidden">
+        <h2 style="margin-bottom: 30px;">Contact <span class="text-red">Info</span></h2>
+        
+        <div class="cms-card">
+          <h3>Contact Details</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="text" id="contact-email" value="contact@mrvidu.com">
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Number (With Country Code, e.g., 94771234567)</label>
+              <input type="text" id="contact-whatsapp" value="94123456789">
+            </div>
+            <div class="form-group full-width">
+              <label>Display Phone Number</label>
+              <input type="text" id="contact-phone-display" value="+94 123 456 789">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="saveContact()">
+          <i class="fas fa-save"></i> Save Contact Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.remove('hidden');
+      if (event) event.currentTarget.classList.add('active');
+    }
+
+    function notify() {
+      const n = document.getElementById('notification');
+      n.style.display = 'block';
+      setTimeout(() => { n.style.display = 'none'; }, 3000);
+    }
+
+    function previewImage(chNum) {
+      const fileInput = document.getElementById(`ch${chNum}-file`);
+      const preview = document.getElementById(`ch${chNum}-preview`);
+      const hiddenInput = document.getElementById(`ch${chNum}-logo`);
+      
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          hiddenInput.value = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function previewPortfolioImage(input) {
+      const card = input.closest('.portfolio-cms-item');
+      const preview = card.querySelector('.port-preview');
+      const hiddenInput = card.querySelector('.port-img-data');
+      
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          hiddenInput.value = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function saveChannels() {
+      const data = {
+        ch1: { name: document.getElementById('ch1-name').value, subs: document.getElementById('ch1-subs').value, link: document.getElementById('ch1-link').value, logo: document.getElementById('ch1-logo').value },
+        ch2: { name: document.getElementById('ch2-name').value, subs: document.getElementById('ch2-subs').value, link: document.getElementById('ch2-link').value, logo: document.getElementById('ch2-logo').value },
+        ch3: { name: document.getElementById('ch3-name').value, subs: document.getElementById('ch3-subs').value, link: document.getElementById('ch3-link').value, logo: document.getElementById('ch3-logo').value }
+      };
+      localStorage.setItem('vidu_channels', JSON.stringify(data));
+      notify();
+    }
+
+    function savePortfolio() {
+      const items = [];
+      document.querySelectorAll('.portfolio-cms-item').forEach(card => {
+        items.push({
+          title: card.querySelector('.port-title').value,
+          category: card.querySelector('.port-category').value,
+          link: card.querySelector('.port-link').value,
+          img: card.querySelector('.port-img-data').value
+        });
+      });
+      localStorage.setItem('vidu_portfolio', JSON.stringify(items));
+      notify();
+    }
+
+    function saveServices() {
+      const items = [];
+      document.querySelectorAll('.service-cms-item').forEach(card => {
+        items.push({
+          title: card.querySelector('.service-title').value,
+          icon: card.querySelector('.service-icon').value,
+          desc: card.querySelector('.service-desc').value,
+          fullDesc: card.querySelector('.service-full-desc').value
+        });
+      });
+      localStorage.setItem('vidu_services', JSON.stringify(items));
+      notify();
+    }
+
+    function saveSocials() {
+      const data = {
+        fb: { name: document.getElementById('fb-name').value, subs: document.getElementById('fb-subs').value, link: document.getElementById('fb-link').value },
+        ig: { name: document.getElementById('ig-name').value, subs: document.getElementById('ig-subs').value, link: document.getElementById('ig-link').value },
+        tt: { name: document.getElementById('tt-name').value, subs: document.getElementById('tt-subs').value, link: document.getElementById('tt-link').value }
+      };
+      localStorage.setItem('vidu_socials', JSON.stringify(data));
+      notify();
+    }
+
+    function saveAbout() {
+      const data = {
+        heading: document.getElementById('about-heading').value,
+        p1: document.getElementById('about-p1').value,
+        p2: document.getElementById('about-p2').value,
+        projects: document.getElementById('stat-projects').value,
+        fans: document.getElementById('stat-fans').value
+      };
+      localStorage.setItem('vidu_about', JSON.stringify(data));
+      notify();
+    }
+
+    window.onload = () => {
+      const savedChannels = JSON.parse(localStorage.getItem('vidu_channels'));
+      if (savedChannels) {
+        for (let i = 1; i <= 3; i++) {
+          const chKey = `ch${i}`;
+          if (savedChannels[chKey]) {
+            document.getElementById(`ch${i}-name`).value = savedChannels[chKey].name;
+            document.getElementById(`ch${i}-subs`).value = savedChannels[chKey].subs;
+            document.getElementById(`ch${i}-link`).value = savedChannels[chKey].link;
+            document.getElementById(`ch${i}-logo`).value = savedChannels[chKey].logo;
+            document.getElementById(`ch${i}-preview`).src = savedChannels[chKey].logo;
+          }
+        }
+      }
+
+      const savedSocials = JSON.parse(localStorage.getItem('vidu_socials'));
+      if (savedSocials) {
+        document.getElementById('fb-name').value = savedSocials.fb.name;
+        document.getElementById('fb-subs').value = savedSocials.fb.subs;
+        document.getElementById('fb-link').value = savedSocials.fb.link;
+        
+        document.getElementById('ig-name').value = savedSocials.ig.name;
+        document.getElementById('ig-subs').value = savedSocials.ig.subs;
+        document.getElementById('ig-link').value = savedSocials.ig.link;
+        
+        document.getElementById('tt-name').value = savedSocials.tt.name;
+        document.getElementById('tt-subs').value = savedSocials.tt.subs;
+        document.getElementById('tt-link').value = savedSocials.tt.link;
+      }
+
+      const savedServices = JSON.parse(localStorage.getItem('vidu_services'));
+      if (savedServices) {
+        const items = document.querySelectorAll('.service-cms-item');
+        savedServices.forEach((data, index) => {
+          if (items[index]) {
+            items[index].querySelector('.service-title').value = data.title;
+            items[index].querySelector('.service-icon').value = data.icon;
+            items[index].querySelector('.service-desc').value = data.desc;
+            if (items[index].querySelector('.service-full-desc')) {
+              items[index].querySelector('.service-full-desc').value = data.fullDesc || '';
+            }
+          }
+        });
+      }
+
+      const savedAbout = JSON.parse(localStorage.getItem('vidu_about'));
+      if (savedAbout) {
+        document.getElementById('about-heading').value = savedAbout.heading;
+        document.getElementById('about-p1').value = savedAbout.p1;
+        document.getElementById('about-p2').value = savedAbout.p2;
+        document.getElementById('stat-projects').value = savedAbout.projects;
+        document.getElementById('stat-fans').value = savedAbout.fans;
+      }
+
+      const savedPortfolio = JSON.parse(localStorage.getItem('vidu_portfolio'));
+      if (savedPortfolio) {
+        const items = document.querySelectorAll('.portfolio-cms-item');
+        savedPortfolio.forEach((data, index) => {
+          if (items[index]) {
+            items[index].querySelector('.port-title').value = data.title;
+            items[index].querySelector('.port-category').value = data.category;
+            items[index].querySelector('.port-link').value = data.link;
+            items[index].querySelector('.port-img-data').value = data.img;
+            items[index].querySelector('.port-preview').src = data.img;
+          }
+        });
+      }
+      const savedContact = JSON.parse(localStorage.getItem('vidu_contact'));
+      if (savedContact) {
+        document.getElementById('contact-email').value = savedContact.email;
+        document.getElementById('contact-whatsapp').value = savedContact.whatsapp;
+        document.getElementById('contact-phone-display').value = savedContact.phone;
+      }
+    };
+    function saveContact() {
+      const data = {
+        email: document.getElementById('contact-email').value,
+        whatsapp: document.getElementById('contact-whatsapp').value,
+        phone: document.getElementById('contact-phone-display').value
+      };
+      localStorage.setItem('vidu_contact', JSON.stringify(data));
+      notify();
+    }
+  </script>
+</body>
+</html>

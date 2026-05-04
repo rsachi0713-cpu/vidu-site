@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MR VIDU | Digital Creator & Music Artist</title>
+  <meta name="description" content="Portfolio of MR VIDU - Music Artist, Band Promoter, and Content Creator. Professional services in music promotion, content creation, and social media growth.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    /* Custom Cursor */
+    #cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary-color);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      transition: transform 0.1s ease;
+      transform: translate(-50%, -50%);
+    }
+    #cursor-blur {
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent 70%);
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(20px);
+    }
+    
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    .loader-content {
+      width: 50px;
+      height: 50px;
+      border: 3px solid transparent;
+      border-top-color: #ff0000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 1000;
+      box-shadow: var(--accent-glow);
+    }
+    #scroll-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-blur"></div>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-content"></div>
+  </div>
+
+  <!-- Scroll to Top -->
+  <div id="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <div class="logo">MR <span>VIDU</span></div>
+    <ul class="nav-links">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-image" data-aos="fade-right">
+      <img src="mr_vidu_profile.png" alt="MR VIDU">
+    </div>
+    <div class="hero-content" data-aos="fade-left">
+      <h1>Hi, I'm <span class="text-red glow-text">MR VIDU</span></h1>
+      <h2 id="typing-text"></h2>
+      <p>Managing multiple YouTube channels and building a strong social media presence. Dedicated to music, band promotion, and high-quality content creation.</p>
+      
+      <div class="social-icons">
+        <a id="cms-social-yt-hero" href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a id="cms-social-fb-hero" href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a id="cms-social-ig-hero" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a id="cms-social-tt-hero" href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
+      </div>
+      
+      <div class="hero-btns">
+        <a href="#contact" class="btn btn-primary">Follow Me</a>
+        <a href="#contact" class="btn btn-outline">Contact Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Media Section -->
+  <section class="social-media" id="social">
+    <h2 class="text-center" style="text-align: center; margin-bottom: 50px;" data-aos="fade-up">My <span class="text-red">Networks</span></h2>
+    <div class="social-grid">
+      <!-- YouTube 1 -->
+      <div class="social-card" data-aos="zoom-in">
+        <img id="cms-ch1-logo" src="https://yt3.googleusercontent.com/r9PZb3f7BXZFdAvU_r1dRa0vHsfPuXvIYTCwOeK4qZsMMkGkKwHP1-iW27gXQHMZhxgeIq7U=s900-c-k-c0x00ffffff-no-rj" alt="VIDU" class="channel-logo">
+        <h3 id="cms-ch1-name">VIDU</h3>
+        <p id="cms-ch1-subs">450K+ Subscribers</p>
+        <a id="cms-ch1-link" href="https://youtube.com/@vidu_roasting?si=6xz2I34mWHBLYftO" target="_blank" class="btn btn-outline">Visit</a>
+      </div>
+      <!-- YouTube 2 -->
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="100">
+        <img id="cms-ch2-logo" src="https://yt3.googleusercontent.com/qXMySQnjHSsQu91QZQGeQuLuUjgbqAm8V_aoYvi77qSum3HR2N1rmrnWZNg99iXKiIiyZoGoBQ=s900-c-k-c0x00ffffff-no-rj" alt="MR VIDU" class="channel-logo">
+        <h3 id="cms-ch2-name">MR VIDU</h3>
+        <p id="cms-ch2-subs">100K+ Subscribers</p>
+        <a id="cms-ch2-link" href="https://youtube.com/@mr_viduu?si=tw1b8lINX0w2SdQU" target="_blank" class="btn btn-outline">Visit</a>
+      </div>
+      <!-- YouTube 3 -->
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="200">
+        <img id="cms-ch3-logo" src="vidu_vlogs_logo.jpg" alt="VIDU VLOGS" class="channel-logo">
+        <h3 id="cms-ch3-name">VIDU VLOGS</h3>
+        <p id="cms-ch3-subs">90K+ Subscribers</p>
+        <a id="cms-ch3-link" href="https://youtube.com/@vidu_vlogss?si=6pRPR0i5AItrUpMM" target="_blank" class="btn btn-outline">Visit</a>
+      </div>
+      <!-- Facebook -->
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="300">
+        <i class="fab fa-facebook"></i>
+        <h3 id="cms-fb-name">Facebook Page</h3>
+        <p id="cms-fb-subs">10K+ Followers</p>
+        <a id="cms-fb-link" href="#" class="btn btn-outline">Visit</a>
+      </div>
+      <!-- Instagram -->
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="400">
+        <i class="fab fa-instagram"></i>
+        <h3 id="cms-ig-name">Instagram</h3>
+        <p id="cms-ig-subs">20K+ Followers</p>
+        <a id="cms-ig-link" href="#" class="btn btn-outline">Visit</a>
+      </div>
+      <!-- TikTok -->
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="500">
+        <i class="fab fa-tiktok"></i>
+        <h3 id="cms-tt-name">TikTok</h3>
+        <p id="cms-tt-subs">150K+ Followers</p>
+        <a id="cms-tt-link" href="#" class="btn btn-outline">Visit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="about-container">
+      <div class="about-text" data-aos="fade-up">
+        <h2 id="cms-about-heading">About <span class="text-red">MR VIDU</span></h2>
+        <p id="cms-about-p1">
+          I am a passionate <span class="highlight">Music Artist</span>, dedicated <span class="highlight">Band Promoter</span>, and creative <span class="highlight">Content Creator</span>. 
+          With a vision to redefine digital presence, I specialize in building brands and fostering communities across various platforms.
+        </p>
+        <p id="cms-about-p2">
+          My journey is driven by <span class="highlight">creativity</span> and a commitment to <span class="highlight">professional excellence</span> in every project I undertake. I believe in the power of visual storytelling and high-impact digital marketing.
+        </p>
+        
+        <div class="about-stats">
+          <div class="stat-item">
+            <i class="fas fa-rocket"></i>
+            <div>
+              <h4 id="cms-stat-projects">100+</h4>
+              <p>Projects Done</p>
+            </div>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-heart"></i>
+            <div>
+              <h4 id="cms-stat-fans">500K+</h4>
+              <p>Global Fans</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <h2 style="text-align: center; margin-bottom: 50px;" data-aos="fade-up">What <span class="text-red">I Do</span></h2>
+    <div class="services-grid">
+      <div class="service-card" data-aos="fade-right">
+        <i class="fas fa-music" id="cms-service-icon-1"></i>
+        <h3 id="cms-service-title-1">Music Promotion</h3>
+        <p id="cms-service-desc-1">Helping artists reach their target audience through strategic digital campaigns.</p>
+      </div>
+      <div class="service-card" data-aos="fade-right" data-aos-delay="100">
+        <i class="fas fa-users" id="cms-service-icon-2"></i>
+        <h3 id="cms-service-title-2">Band Promotion</h3>
+        <p id="cms-service-desc-2">Connecting bands with fans and venues to boost their visibility and bookings.</p>
+      </div>
+      <div class="service-card" data-aos="fade-right" data-aos-delay="200">
+        <i class="fas fa-video" id="cms-service-icon-3"></i>
+        <h3 id="cms-service-title-3">Content Creation</h3>
+        <p id="cms-service-desc-3">Producing engaging video and visual content for YouTube and social media.</p>
+      </div>
+      <div class="service-card" data-aos="fade-right" data-aos-delay="300">
+        <i class="fas fa-chart-line" id="cms-service-icon-4"></i>
+        <h3 id="cms-service-title-4">Social Media Growth</h3>
+        <p id="cms-service-desc-4">Organic growth strategies to build a loyal and active following.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Portfolio Section -->
+  <section class="portfolio" id="portfolio">
+    <h2 style="text-align: center; margin-bottom: 30px;" data-aos="fade-up">Featured <span class="text-red">Work</span></h2>
+    
+    <!-- Portfolio Filters -->
+    <div class="portfolio-filters" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;" data-aos="fade-up">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="music">Music</button>
+      <button class="filter-btn" data-filter="videos">Videos</button>
+      <button class="filter-btn" data-filter="promotions">Promotions</button>
+    </div>
+
+    <div class="portfolio-grid" id="cms-portfolio-grid">
+      <!-- Portfolio Item 1 -->
+      <div class="portfolio-item music" data-aos="zoom-in" id="cms-port-1">
+        <img id="cms-port-img-1" src="music_promotion_thumb.png" alt="Music Promotion">
+        <div class="portfolio-overlay">
+          <h3 id="cms-port-title-1">Music Video</h3>
+          <p>Official Release</p>
+          <a id="cms-port-link-1" href="#" class="btn btn-outline" style="color: white; border-color: white;">View Project</a>
+        </div>
+      </div>
+      <!-- Portfolio Item 2 -->
+      <div class="portfolio-item videos" data-aos="zoom-in" data-aos-delay="100" id="cms-port-2">
+        <img id="cms-port-img-2" src="content_creation_thumb.png" alt="Content Creation">
+        <div class="portfolio-overlay">
+          <h3 id="cms-port-title-2">Vlog Series</h3>
+          <p>YouTube Content</p>
+          <a id="cms-port-link-2" href="#" class="btn btn-outline" style="color: white; border-color: white;">View Project</a>
+        </div>
+      </div>
+      <!-- Portfolio Item 3 -->
+      <div class="portfolio-item promotions" data-aos="zoom-in" data-aos-delay="200" id="cms-port-3">
+        <img id="cms-port-img-3" src="music_promotion_thumb.png" alt="Band Promo">
+        <div class="portfolio-overlay">
+          <h3 id="cms-port-title-3">Band Promotion</h3>
+          <p>Social Media Campaign</p>
+          <a id="cms-port-link-3" href="#" class="btn btn-outline" style="color: white; border-color: white;">View Project</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="contact-container">
+      <div class="contact-info" data-aos="fade-right">
+        <h2 style="margin-bottom: 30px;">Let's <span class="text-red">Connect</span></h2>
+        <p style="margin-bottom: 30px;">Ready to start your next project or just want to say hi? Reach out to me anytime!</p>
+        
+        <div style="margin-bottom: 20px;">
+          <i class="fas fa-envelope text-red"></i> <span id="cms-contact-email">contact@mrvidu.com</span>
+        </div>
+        <div style="margin-bottom: 30px;">
+          <i class="fab fa-whatsapp text-red"></i> <span id="cms-contact-phone">+94 123 456 789</span>
+        </div>
+        
+        <a id="cms-whatsapp-link" href="https://wa.me/94123456789" class="btn whatsapp-btn">
+          <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+      </div>
+      
+      <form class="contact-form" data-aos="fade-left">
+        <div class="form-group">
+          <input type="text" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Your Email" required>
+        </div>
+        <div class="form-group">
+          <textarea rows="5" placeholder="Your Message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 MR VIDU | All Rights Reserved</p>
+    <div class="social-icons" style="justify-content: center; margin: 20px 0 0;">
+      <a id="cms-social-yt-footer" href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+      <a id="cms-social-fb-footer" href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a id="cms-social-ig-footer" href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a id="cms-social-tt-footer" href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
+    </div>
+  </footer>
+
+  <!-- Service Detail Modal -->
+  <div id="service-modal" class="modal">
+    <div class="modal-content" data-aos="zoom-in">
+      <span class="close-modal">&times;</span>
+      <div class="modal-header">
+        <i id="modal-icon" class="fas fa-music"></i>
+        <h2 id="modal-title">Service Title</h2>
+      </div>
+      <div class="modal-body">
+        <p id="modal-desc">Full details will appear here...</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
