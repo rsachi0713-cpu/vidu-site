@@ -1,3 +1,4 @@
+console.log("Admin.js loaded");
 import { supabase } from './supabase.js'
 
 // Auth Check (Simple for now, matching your current admin/admin123)
