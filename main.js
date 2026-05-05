@@ -99,12 +99,7 @@ async function loadCMSContent() {
 
     card.style.cursor = 'pointer';
     card.onclick = () => {
-      openServiceModal({
-        title: item ? item.title : document.getElementById(`cms-service-title-${idx}`).textContent,
-        icon: item ? item.icon_class : document.getElementById(`cms-service-icon-${idx}`).className,
-        desc: item ? item.description : document.getElementById(`cms-service-desc-${idx}`).textContent,
-        fullDesc: item ? item.full_description : ""
-      });
+      window.open(`service-detail.html?id=${item ? item.id : idx}`, '_blank');
     };
   });
 

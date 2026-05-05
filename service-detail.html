@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Details | MR VIDU</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+  
+  <style>
+    .service-detail-container {
+      padding: 150px 10% 100px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .detail-icon {
+      font-size: 80px;
+      margin-bottom: 30px;
+      background: rgba(255, 0, 0, 0.1);
+      width: 150px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+      box-shadow: var(--accent-glow);
+    }
+    
+    .detail-title {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .detail-short-desc {
+      color: var(--primary-color);
+      font-size: 20px;
+      font-weight: 600;
+      max-width: 800px;
+      margin-bottom: 40px;
+    }
+    
+    .detail-full-desc {
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      text-align: left;
+      background: var(--secondary-color);
+      padding: 40px;
+      border-radius: 20px;
+      border: 1px solid #333;
+      white-space: pre-wrap;
+    }
+    
+    .back-btn {
+      margin-top: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .loader-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="service-loader" class="loader-container">
+    <div class="logo">MR <span>VIDU</span></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav id="navbar" class="sticky">
+    <a href="index.html" class="logo">MR <span>VIDU</span></a>
+    <div class="nav-links">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#portfolio">Portfolio</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <div class="service-detail-container">
+    <div id="service-icon" class="detail-icon">
+      <i class="fas fa-music"></i>
+    </div>
+    <h1 id="service-title" class="detail-title">Loading...</h1>
+    <p id="service-short-desc" class="detail-short-desc"></p>
+    <div id="service-full-desc" class="detail-full-desc"></div>
+    
+    <a href="index.html#services" class="btn btn-primary back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Services
+    </a>
+  </div>
+
+  <footer>
+    <p>© 2026 MR VIDU | All Rights Reserved</p>
+  </footer>
+
+  <script type="module" src="./service-detail.js"></script>
+</body>
+</html>
