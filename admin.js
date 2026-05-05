@@ -39,6 +39,7 @@ async function uploadImage(file, bucket = 'media') {
     
   if (error) {
     console.error('Upload Error:', error);
+    alert('Image Upload Failed: ' + error.message);
     return null;
   }
   
@@ -81,7 +82,11 @@ window.saveChannels = async () => {
         logo_url: logoUrl
       });
 
-    if (error) console.error(`Error saving ${ch.name}:`, error);
+    if (error) {
+      console.error(`Error saving ${ch.name}:`, error);
+      alert(`Error saving ${ch.name}: ` + error.message);
+      return;
+    }
   }
   notify("YouTube Channels Updated!");
 }
@@ -95,17 +100,25 @@ window.saveSocials = async () => {
     const subs = document.getElementById(`${s}-subs`).value;
     const link = document.getElementById(`${s}-link`).value;
 
+    const data = {
+      id: socials.indexOf(s) + 4,
+      platform_name: platforms[s],
+      display_name: name,
+      subscribers_count: subs,
+      profile_link: link
+    };
+    
+    console.log(`Attempting to save ${s}:`, data);
+
     const { error } = await supabase
       .from('social_links')
-      .upsert({
-        id: socials.indexOf(s) + 4, // Starting IDs from 4 for other socials
-        platform_name: platforms[s],
-        display_name: name,
-        subscribers_count: subs,
-        profile_link: link
-      });
+      .upsert(data);
 
-    if (error) console.error(`Error saving ${s}:`, error);
+    if (error) {
+      console.error(`Error saving ${s}:`, error);
+      alert(`Error saving ${s}: ` + error.message);
+      return;
+    }
   }
   notify("Social Networks Updated!");
 }
@@ -137,8 +150,12 @@ window.savePortfolio = async () => {
   }
 
   const { error } = await supabase.from('portfolio').upsert(items);
-  if (error) console.error('Error saving portfolio:', error);
-  else notify("Portfolio Updated!");
+  if (error) {
+    console.error('Error saving portfolio:', error);
+    alert('Error saving portfolio: ' + error.message);
+  } else {
+    notify("Portfolio Updated!");
+  }
 }
 
 window.saveServices = async () => {
@@ -153,8 +170,12 @@ window.saveServices = async () => {
   });
 
   const { error } = await supabase.from('services').upsert(items);
-  if (error) console.error('Error saving services:', error);
-  else notify("Services Updated!");
+  if (error) {
+    console.error('Error saving services:', error);
+    alert('Error saving services: ' + error.message);
+  } else {
+    notify("Services Updated!");
+  }
 }
 
 window.saveAbout = async () => {
