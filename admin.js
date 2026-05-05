@@ -1,38 +1,24 @@
-console.log("Admin.js loaded");
 import { supabase } from './supabase.js'
 
-// Auth Check (Simple for now, matching your current admin/admin123)
-window.loginAdmin = () => {
-  const user = document.getElementById('admin-user').value;
-  const pass = document.getElementById('admin-pass').value;
-  
-  if (user === 'admin' && pass === 'admin123') {
-    document.getElementById('login-page').classList.add('hidden');
-    loadAllData();
-  } else {
-    alert('Invalid Credentials');
-  }
+console.log("Admin.js loaded");
+
+// --- UTILS ---
+function notify(msg) {
+  const toast = document.createElement('div');
+  toast.className = 'toast-notify';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 100);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
-// Tab Switching
-window.showTab = (tab) => {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.remove('hidden');
-  if (event) event.currentTarget.classList.add('active');
-}
-
-// Notification
-function notify(msg = "Changes Saved Successfully!") {
-  const n = document.getElementById('notification');
-  n.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
-  n.style.display = 'block';
-  setTimeout(() => { n.style.display = 'none'; }, 3000);
-}
-
-// Image Upload to Supabase Storage
 async function uploadImage(file, bucket = 'media') {
-  const fileName = `${Date.now()}-${file.name}`;
+  const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+  console.log(`Uploading image: ${fileName}`);
+  
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(fileName, file);
@@ -53,164 +39,162 @@ async function uploadImage(file, bucket = 'media') {
 // --- SAVE FUNCTIONS ---
 
 window.saveChannels = async () => {
-  const channels = [
-    { id: 1, name: 'ch1' },
-    { id: 2, name: 'ch2' },
-    { id: 3, name: 'ch3' }
-  ];
+  try {
+    for (let i = 1; i <= 3; i++) {
+      const name = document.getElementById(`ch${i}-name`).value;
+      const subs = document.getElementById(`ch${i}-subs`).value;
+      const link = document.getElementById(`ch${i}-link`).value;
+      
+      // Get current data to keep existing logo if not changed
+      const { data: current } = await supabase.from('social_links').select('logo_url').eq('id', i).single();
+      let logoUrl = current ? current.logo_url : '';
+      
+      const fileInput = document.getElementById(`ch${i}-file`);
+      if (fileInput.files[0]) {
+        const uploaded = await uploadImage(fileInput.files[0]);
+        if (uploaded) logoUrl = uploaded;
+      }
 
-  for (const ch of channels) {
-    const name = document.getElementById(`${ch.name}-name`).value;
-    const subs = document.getElementById(`${ch.name}-subs`).value;
-    const link = document.getElementById(`${ch.name}-link`).value;
-    const fileInput = document.getElementById(`${ch.name}-file`);
-    let logoUrl = document.getElementById(`${ch.name}-logo`).value;
-
-    if (fileInput.files[0]) {
-      const uploadedUrl = await uploadImage(fileInput.files[0]);
-      if (uploadedUrl) logoUrl = uploadedUrl;
-    }
-
-    const { error } = await supabase
-      .from('social_links')
-      .upsert({
-        id: ch.id, // Using fixed IDs for the 3 main channels
+      console.log(`Saving Channel ${i}:`, { name, subs, link, logoUrl });
+      const { error } = await supabase.from('social_links').upsert({
+        id: i,
         platform_name: 'YouTube',
         display_name: name,
         subscribers_count: subs,
         profile_link: link,
         logo_url: logoUrl
       });
-
-    if (error) {
-      console.error(`Error saving ${ch.name}:`, error);
-      alert(`Error saving ${ch.name}: ` + error.message);
-      return;
+      if (error) throw error;
     }
+    notify("YouTube Channels Updated!");
+  } catch (err) {
+    console.error("Save Channels Error:", err);
+    alert("Failed to save channels: " + err.message);
   }
-  notify("YouTube Channels Updated!");
 }
 
 window.saveSocials = async () => {
-  const socials = ['fb', 'ig', 'tt'];
-  const platforms = { fb: 'Facebook', ig: 'Instagram', tt: 'TikTok' };
-
-  for (const s of socials) {
-    const name = document.getElementById(`${s}-name`).value;
-    const subs = document.getElementById(`${s}-subs`).value;
-    const link = document.getElementById(`${s}-link`).value;
-
-    const data = {
-      id: socials.indexOf(s) + 4,
-      platform_name: platforms[s],
-      display_name: name,
-      subscribers_count: subs,
-      profile_link: link
-    };
+  try {
+    const socials = ['fb', 'ig', 'tt'];
+    const platforms = { fb: 'Facebook', ig: 'Instagram', tt: 'TikTok' };
     
-    console.log(`Attempting to save ${s}:`, data);
+    for (const s of socials) {
+      const name = document.getElementById(`${s}-name`).value;
+      const subs = document.getElementById(`${s}-subs`).value;
+      const link = document.getElementById(`${s}-link`).value;
 
-    const { error } = await supabase
-      .from('social_links')
-      .upsert(data);
-
-    if (error) {
-      console.error(`Error saving ${s}:`, error);
-      alert(`Error saving ${s}: ` + error.message);
-      return;
+      const data = {
+        id: socials.indexOf(s) + 4,
+        platform_name: platforms[s],
+        display_name: name,
+        subscribers_count: subs,
+        profile_link: link
+      };
+      
+      console.log(`Saving ${s}:`, data);
+      const { error } = await supabase.from('social_links').upsert(data);
+      if (error) throw error;
     }
+    notify("Social Networks Updated!");
+  } catch (err) {
+    console.error("Save Socials Error:", err);
+    alert("Failed to save social networks: " + err.message);
   }
-  notify("Social Networks Updated!");
 }
 
 window.savePortfolio = async () => {
-  const items = [];
-  const cardElements = document.querySelectorAll('.portfolio-cms-item');
-  
-  for (const card of cardElements) {
-    const id = parseInt(card.dataset.id);
-    const title = card.querySelector('.port-title').value;
-    const category = card.querySelector('.port-category').value;
-    const link = card.querySelector('.port-link').value;
-    const fileInput = card.querySelector('.port-file');
-    let imgUrl = card.querySelector('.port-img-data').value;
+  try {
+    for (let i = 1; i <= 3; i++) {
+      const title = document.getElementById(`port-title-${i}`).value;
+      const category = document.getElementById(`port-cat-${i}`).value;
+      const link = document.getElementById(`port-link-${i}`).value;
+      
+      const { data: current } = await supabase.from('portfolio').select('image_url').eq('id', i).single();
+      let imgUrl = current ? current.image_url : '';
+      
+      const fileInput = document.getElementById(`port-file-${i}`);
+      if (fileInput.files[0]) {
+        const uploaded = await uploadImage(fileInput.files[0]);
+        if (uploaded) imgUrl = uploaded;
+      }
 
-    if (fileInput.files[0]) {
-      const uploadedUrl = await uploadImage(fileInput.files[0]);
-      if (uploadedUrl) imgUrl = uploadedUrl;
+      console.log(`Saving Portfolio ${i}:`, { title, category, imgUrl });
+      const { error } = await supabase.from('portfolio').upsert({
+        id: i,
+        title: title,
+        category: category,
+        image_url: imgUrl,
+        project_link: link
+      });
+      if (error) throw error;
     }
-
-    items.push({
-      id: id,
-      title: title,
-      category: category,
-      image_url: imgUrl,
-      project_link: link
-    });
-  }
-
-  const { error } = await supabase.from('portfolio').upsert(items);
-  if (error) {
-    console.error('Error saving portfolio:', error);
-    alert('Error saving portfolio: ' + error.message);
-  } else {
     notify("Portfolio Updated!");
+  } catch (err) {
+    console.error("Save Portfolio Error:", err);
+    alert("Failed to save portfolio: " + err.message);
   }
 }
 
 window.saveServices = async () => {
-  const items = [];
-  document.querySelectorAll('.service-cms-item').forEach(card => {
-    items.push({
-      id: parseInt(card.dataset.id),
-      title: card.querySelector('.service-title').value,
-      icon_class: card.querySelector('.service-icon').value,
-      description: card.querySelector('.service-desc').value
+  try {
+    const items = [];
+    document.querySelectorAll('.service-cms-item').forEach(card => {
+      items.push({
+        id: parseInt(card.dataset.id),
+        title: card.querySelector('.service-title').value,
+        icon_class: card.querySelector('.service-icon').value,
+        description: card.querySelector('.service-desc').value,
+        full_description: card.querySelector('.service-full-desc').value
+      });
     });
-  });
 
-  const { error } = await supabase.from('services').upsert(items);
-  if (error) {
-    console.error('Error saving services:', error);
-    alert('Error saving services: ' + error.message);
-  } else {
+    console.log("Saving Services:", items);
+    const { error } = await supabase.from('services').upsert(items);
+    if (error) throw error;
     notify("Services Updated!");
+  } catch (err) {
+    console.error("Save Services Error:", err);
+    alert("Failed to save services: " + err.message);
   }
 }
 
 window.saveAbout = async () => {
-  const data = {
-    id: 1,
-    about_heading: document.getElementById('about-heading').value,
-    about_p1: document.getElementById('about-p1').value,
-    about_p2: document.getElementById('about-p2').value,
-    stat_projects: document.getElementById('stat-projects').value,
-    stat_fans: document.getElementById('stat-fans').value,
-  };
+  try {
+    const data = {
+      id: 1,
+      about_heading: document.getElementById('about-heading').value,
+      about_p1: document.getElementById('about-p1').value,
+      about_p2: document.getElementById('about-p2').value,
+      stat_projects: document.getElementById('stat-projects').value,
+      stat_fans: document.getElementById('stat-fans').value,
+    };
 
-  const { error } = await supabase.from('site_settings').upsert(data);
-  if (error) {
-    console.error('Error saving about:', error);
-    alert('Error saving about: ' + error.message);
-  } else {
+    console.log("Saving About:", data);
+    const { error } = await supabase.from('site_settings').upsert(data);
+    if (error) throw error;
     notify("About & Stats Updated!");
+  } catch (err) {
+    console.error("Save About Error:", err);
+    alert("Failed to save about info: " + err.message);
   }
 }
 
 window.saveContact = async () => {
-  const data = {
-    id: 1,
-    contact_email: document.getElementById('contact-email').value,
-    contact_whatsapp: document.getElementById('contact-whatsapp').value,
-    contact_phone: document.getElementById('contact-phone-display').value,
-  };
+  try {
+    const data = {
+      id: 1,
+      contact_email: document.getElementById('contact-email').value,
+      contact_whatsapp: document.getElementById('contact-whatsapp').value,
+      contact_phone: document.getElementById('contact-phone-display').value,
+    };
 
-  const { error } = await supabase.from('site_settings').upsert(data);
-  if (error) {
-    console.error('Error saving contact:', error);
-    alert('Error saving contact: ' + error.message);
-  } else {
+    console.log("Saving Contact:", data);
+    const { error } = await supabase.from('site_settings').upsert(data);
+    if (error) throw error;
     notify("Contact Info Updated!");
+  } catch (err) {
+    console.error("Save Contact Error:", err);
+    alert("Failed to save contact info: " + err.message);
   }
 }
 
@@ -218,12 +202,10 @@ window.saveContact = async () => {
 async function loadAllData() {
   try {
     console.log("Loading all data from Supabase...");
+    
     // Load Social Links
     const { data: socialData, error: socialError } = await supabase.from('social_links').select('*').order('id');
-    
     if (socialError) throw socialError;
-    
-    console.log("Social Data:", socialData);
 
     if (socialData) {
       socialData.forEach(item => {
@@ -233,8 +215,9 @@ async function loadAllData() {
             document.getElementById(`ch${i}-name`).value = item.display_name || '';
             document.getElementById(`ch${i}-subs`).value = item.subscribers_count || '';
             document.getElementById(`ch${i}-link`).value = item.profile_link || '';
-            document.getElementById(`ch${i}-logo`).value = item.logo_url || '';
-            document.getElementById(`ch${i}-preview`).src = item.logo_url || '';
+            if (item.logo_url && document.getElementById(`ch${i}-preview`)) {
+              document.getElementById(`ch${i}-preview`).src = item.logo_url;
+            }
           }
         } else {
           const map = { 4: 'fb', 5: 'ig', 6: 'tt' };
@@ -259,13 +242,34 @@ async function loadAllData() {
           items[index].querySelector('.service-title').value = data.title || '';
           items[index].querySelector('.service-icon').value = data.icon_class || '';
           items[index].querySelector('.service-desc').value = data.description || '';
+          if (items[index].querySelector('.service-full-desc')) {
+            items[index].querySelector('.service-full-desc').value = data.full_description || '';
+          }
         }
       });
     }
 
+    // Load Portfolio
+    const { data: portfolioData, error: portfolioError } = await supabase.from('portfolio').select('*').order('id');
+    if (portfolioError) throw portfolioError;
+
+    if (portfolioData) {
+      for (let i = 1; i <= 3; i++) {
+        const item = portfolioData.find(p => p.id === i);
+        if (item) {
+          if (document.getElementById(`port-title-${i}`)) document.getElementById(`port-title-${i}`).value = item.title || '';
+          if (document.getElementById(`port-cat-${i}`)) document.getElementById(`port-cat-${i}`).value = item.category || 'Music';
+          if (document.getElementById(`port-link-${i}`)) document.getElementById(`port-link-${i}`).value = item.project_link || '';
+          if (item.image_url && document.getElementById(`port-preview-${i}`)) {
+            document.getElementById(`port-preview-${i}`).src = item.image_url;
+          }
+        }
+      }
+    }
+
     // Load About, Stats & Contact
     const { data: aboutData, error: aboutError } = await supabase.from('site_settings').select('*').eq('id', 1).single();
-    if (aboutError && aboutError.code !== 'PGRST116') throw aboutError; // PGRST116 is 'no rows returned'
+    if (aboutError && aboutError.code !== 'PGRST116') throw aboutError;
 
     if (aboutData) {
       if (document.getElementById('about-heading')) document.getElementById('about-heading').value = aboutData.about_heading || '';
@@ -273,52 +277,15 @@ async function loadAllData() {
       if (document.getElementById('about-p2')) document.getElementById('about-p2').value = aboutData.about_p2 || '';
       if (document.getElementById('stat-projects')) document.getElementById('stat-projects').value = aboutData.stat_projects || '';
       if (document.getElementById('stat-fans')) document.getElementById('stat-fans').value = aboutData.stat_fans || '';
+      
       if (document.getElementById('contact-email')) document.getElementById('contact-email').value = aboutData.contact_email || '';
       if (document.getElementById('contact-whatsapp')) document.getElementById('contact-whatsapp').value = aboutData.contact_whatsapp || '';
       if (document.getElementById('contact-phone-display')) document.getElementById('contact-phone-display').value = aboutData.contact_phone || '';
     }
 
-    // Load Portfolio
-    const { data: portfolioData, error: portError } = await supabase.from('portfolio').select('*').order('id');
-    if (portError) throw portError;
-
-    if (portfolioData) {
-      const items = document.querySelectorAll('.portfolio-cms-item');
-      portfolioData.forEach((data, index) => {
-        if (items[index]) {
-          items[index].querySelector('.port-title').value = data.title || '';
-          items[index].querySelector('.port-category').value = data.category || '';
-          items[index].querySelector('.port-link').value = data.project_link || '';
-          items[index].querySelector('.port-img-data').value = data.image_url || '';
-          items[index].querySelector('.port-preview').src = data.image_url || '';
-        }
-      });
-    }
   } catch (err) {
-    console.error("Error loading data:", err);
+    console.error("Load All Data Error:", err);
   }
 }
 
-// Image Previews
-window.previewPortfolioImage = (input) => {
-  const card = input.closest('.portfolio-cms-item');
-  const preview = card.querySelector('.port-preview');
-  const file = input.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => preview.src = e.target.result;
-    reader.readAsDataURL(file);
-  }
-}
-
-// Image Previews
-window.previewImage = (chNum) => {
-  const fileInput = document.getElementById(`ch${chNum}-file`);
-  const preview = document.getElementById(`ch${chNum}-preview`);
-  const file = fileInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => preview.src = e.target.result;
-    reader.readAsDataURL(file);
-  }
-}
+document.addEventListener('DOMContentLoaded', loadAllData);

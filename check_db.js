@@ -15,6 +15,9 @@ async function checkData() {
   const { data: settings, error: e2 } = await supabase.from('site_settings').select('*')
   if (e2) console.error(e2)
   else console.table(settings)
+  console.log("\n--- Services ---")
+  const { data: services } = await supabase.from('services').select('*')
+  console.table(services)
 }
 
 checkData()
