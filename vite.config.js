@@ -1,8 +1,15 @@
 import { defineConfig } from 'vite'
+import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [],
   build: {
     outDir: 'dist',
-  }
+    rollupOptions: {
+      input: {
+        main: resolve(process.cwd(), 'index.html'),
+        admin: resolve(process.cwd(), 'admin.html'),
+      },
+    },
+  },
 })
