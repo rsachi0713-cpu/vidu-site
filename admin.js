@@ -21,6 +21,22 @@ function checkLogin() {
   }
 }
 
+window.showTab = (tabId) => {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.add('hidden');
+  });
+  // Remove active class from menu items
+  document.querySelectorAll('.menu-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  // Show target tab
+  document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+  // Add active class to clicked menu item
+  const activeItem = Array.from(document.querySelectorAll('.menu-item')).find(item => item.textContent.toLowerCase().includes(tabId.toLowerCase()));
+  if (activeItem) activeItem.classList.add('active');
+}
+
 
 // --- UTILS ---
 function notify(msg) {
