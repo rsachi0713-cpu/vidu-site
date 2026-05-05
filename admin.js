@@ -143,8 +143,7 @@ window.saveServices = async () => {
         id: parseInt(card.dataset.id),
         title: card.querySelector('.service-title').value,
         icon_class: card.querySelector('.service-icon').value,
-        description: card.querySelector('.service-desc').value,
-        full_description: card.querySelector('.service-full-desc').value
+        description: card.querySelector('.service-desc').value
       });
     });
 
@@ -242,9 +241,6 @@ async function loadAllData() {
           items[index].querySelector('.service-title').value = data.title || '';
           items[index].querySelector('.service-icon').value = data.icon_class || '';
           items[index].querySelector('.service-desc').value = data.description || '';
-          if (items[index].querySelector('.service-full-desc')) {
-            items[index].querySelector('.service-full-desc').value = data.full_description || '';
-          }
         }
       });
     }
