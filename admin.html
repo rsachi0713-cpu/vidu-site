@@ -204,10 +204,10 @@
       <h2 style="margin-bottom: 30px;">Admin <span class="text-red">Access</span></h2>
       <form onsubmit="event.preventDefault(); window.loginAdmin();">
         <div class="form-group">
-          <input type="text" placeholder="Admin Username" value="admin" required>
+          <input type="text" id="admin-user" placeholder="Admin Username" value="admin" required>
         </div>
         <div class="form-group">
-          <input type="password" placeholder="Password" value="admin123" required>
+          <input type="password" id="admin-pass" placeholder="Password" value="admin123" required>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%;">Enter Admin Panel</button>
       </form>
@@ -652,30 +652,7 @@
     </div>
   </div>
 
-            items[index].querySelector('.port-title').value = data.title;
-            items[index].querySelector('.port-category').value = data.category;
-            items[index].querySelector('.port-link').value = data.link;
-            items[index].querySelector('.port-img-data').value = data.img;
-            items[index].querySelector('.port-preview').src = data.img;
-          }
-        });
-      }
-      const savedContact = JSON.parse(localStorage.getItem('vidu_contact'));
-      if (savedContact) {
-        document.getElementById('contact-email').value = savedContact.email;
-        document.getElementById('contact-whatsapp').value = savedContact.whatsapp;
-        document.getElementById('contact-phone-display').value = savedContact.phone;
-      }
-    };
-    function saveContact() {
-      const data = {
-        email: document.getElementById('contact-email').value,
-        whatsapp: document.getElementById('contact-whatsapp').value,
-        phone: document.getElementById('contact-phone-display').value
-      };
-      localStorage.setItem('vidu_contact', JSON.stringify(data));
-      notify();
-    }
-  </script>
+  <!-- Scripts -->
+  <script type="module" src="./admin.js"></script>
 </body>
 </html>

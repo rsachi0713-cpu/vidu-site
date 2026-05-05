@@ -2,8 +2,8 @@ import { supabase } from './supabase.js'
 
 // Auth Check (Simple for now, matching your current admin/admin123)
 window.loginAdmin = () => {
-  const user = document.querySelector('input[placeholder="Admin Username"]').value;
-  const pass = document.querySelector('input[placeholder="Password"]').value;
+  const user = document.getElementById('admin-user').value;
+  const pass = document.getElementById('admin-pass').value;
   
   if (user === 'admin' && pass === 'admin123') {
     document.getElementById('login-page').classList.add('hidden');
@@ -162,12 +162,26 @@ window.saveAbout = async () => {
     about_heading: document.getElementById('about-heading').value,
     about_p1: document.getElementById('about-p1').value,
     about_p2: document.getElementById('about-p2').value,
-    // Add stats here if you added them to the table
+    stat_projects: document.getElementById('stat-projects').value,
+    stat_fans: document.getElementById('stat-fans').value,
   };
 
   const { error } = await supabase.from('site_settings').upsert(data);
   if (error) console.error('Error saving about:', error);
-  else notify("About Section Updated!");
+  else notify("About & Stats Updated!");
+}
+
+window.saveContact = async () => {
+  const data = {
+    id: 1,
+    contact_email: document.getElementById('contact-email').value,
+    contact_whatsapp: document.getElementById('contact-whatsapp').value,
+    contact_phone: document.getElementById('contact-phone-display').value,
+  };
+
+  const { error } = await supabase.from('site_settings').upsert(data);
+  if (error) console.error('Error saving contact:', error);
+  else notify("Contact Info Updated!");
 }
 
 // --- LOAD DATA ---
@@ -208,12 +222,17 @@ async function loadAllData() {
     });
   }
 
-  // Load About
+  // Load About, Stats & Contact
   const { data: aboutData } = await supabase.from('site_settings').select('*').eq('id', 1).single();
   if (aboutData) {
-    document.getElementById('about-heading').value = aboutData.about_heading;
-    document.getElementById('about-p1').value = aboutData.about_p1;
-    document.getElementById('about-p2').value = aboutData.about_p2;
+    document.getElementById('about-heading').value = aboutData.about_heading || '';
+    document.getElementById('about-p1').value = aboutData.about_p1 || '';
+    document.getElementById('about-p2').value = aboutData.about_p2 || '';
+    document.getElementById('stat-projects').value = aboutData.stat_projects || '';
+    document.getElementById('stat-fans').value = aboutData.stat_fans || '';
+    document.getElementById('contact-email').value = aboutData.contact_email || '';
+    document.getElementById('contact-whatsapp').value = aboutData.contact_whatsapp || '';
+    document.getElementById('contact-phone-display').value = aboutData.contact_phone || '';
   }
 
   // Load Portfolio
