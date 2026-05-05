@@ -187,68 +187,86 @@ window.saveContact = async () => {
 
 // --- LOAD DATA ---
 async function loadAllData() {
-  // Load Social Links
-  const { data: socialData } = await supabase.from('social_links').select('*').order('id');
-  if (socialData) {
-    socialData.forEach(item => {
-      if (item.id <= 3) {
-        const i = item.id;
-        document.getElementById(`ch${i}-name`).value = item.display_name;
-        document.getElementById(`ch${i}-subs`).value = item.subscribers_count;
-        document.getElementById(`ch${i}-link`).value = item.profile_link;
-        document.getElementById(`ch${i}-logo`).value = item.logo_url;
-        document.getElementById(`ch${i}-preview`).src = item.logo_url;
-      } else {
-        const map = { 4: 'fb', 5: 'ig', 6: 'tt' };
-        const prefix = map[item.id];
-        if (prefix) {
-          document.getElementById(`${prefix}-name`).value = item.display_name;
-          document.getElementById(`${prefix}-subs`).value = item.subscribers_count;
-          document.getElementById(`${prefix}-link`).value = item.profile_link;
+  try {
+    console.log("Loading all data from Supabase...");
+    // Load Social Links
+    const { data: socialData, error: socialError } = await supabase.from('social_links').select('*').order('id');
+    
+    if (socialError) throw socialError;
+    
+    console.log("Social Data:", socialData);
+
+    if (socialData) {
+      socialData.forEach(item => {
+        if (item.id <= 3) {
+          const i = item.id;
+          if (document.getElementById(`ch${i}-name`)) {
+            document.getElementById(`ch${i}-name`).value = item.display_name || '';
+            document.getElementById(`ch${i}-subs`).value = item.subscribers_count || '';
+            document.getElementById(`ch${i}-link`).value = item.profile_link || '';
+            document.getElementById(`ch${i}-logo`).value = item.logo_url || '';
+            document.getElementById(`ch${i}-preview`).src = item.logo_url || '';
+          }
+        } else {
+          const map = { 4: 'fb', 5: 'ig', 6: 'tt' };
+          const prefix = map[item.id];
+          if (prefix && document.getElementById(`${prefix}-name`)) {
+            document.getElementById(`${prefix}-name`).value = item.display_name || '';
+            document.getElementById(`${prefix}-subs`).value = item.subscribers_count || '';
+            document.getElementById(`${prefix}-link`).value = item.profile_link || '';
+          }
         }
-      }
-    });
-  }
+      });
+    }
 
-  // Load Services
-  const { data: servicesData } = await supabase.from('services').select('*').order('id');
-  if (servicesData) {
-    const items = document.querySelectorAll('.service-cms-item');
-    servicesData.forEach((data, index) => {
-      if (items[index]) {
-        items[index].querySelector('.service-title').value = data.title;
-        items[index].querySelector('.service-icon').value = data.icon_class;
-        items[index].querySelector('.service-desc').value = data.description;
-      }
-    });
-  }
+    // Load Services
+    const { data: servicesData, error: servicesError } = await supabase.from('services').select('*').order('id');
+    if (servicesError) throw servicesError;
 
-  // Load About, Stats & Contact
-  const { data: aboutData } = await supabase.from('site_settings').select('*').eq('id', 1).single();
-  if (aboutData) {
-    document.getElementById('about-heading').value = aboutData.about_heading || '';
-    document.getElementById('about-p1').value = aboutData.about_p1 || '';
-    document.getElementById('about-p2').value = aboutData.about_p2 || '';
-    document.getElementById('stat-projects').value = aboutData.stat_projects || '';
-    document.getElementById('stat-fans').value = aboutData.stat_fans || '';
-    document.getElementById('contact-email').value = aboutData.contact_email || '';
-    document.getElementById('contact-whatsapp').value = aboutData.contact_whatsapp || '';
-    document.getElementById('contact-phone-display').value = aboutData.contact_phone || '';
-  }
+    if (servicesData) {
+      const items = document.querySelectorAll('.service-cms-item');
+      servicesData.forEach((data, index) => {
+        if (items[index]) {
+          items[index].querySelector('.service-title').value = data.title || '';
+          items[index].querySelector('.service-icon').value = data.icon_class || '';
+          items[index].querySelector('.service-desc').value = data.description || '';
+        }
+      });
+    }
 
-  // Load Portfolio
-  const { data: portfolioData } = await supabase.from('portfolio').select('*').order('id');
-  if (portfolioData) {
-    const items = document.querySelectorAll('.portfolio-cms-item');
-    portfolioData.forEach((data, index) => {
-      if (items[index]) {
-        items[index].querySelector('.port-title').value = data.title;
-        items[index].querySelector('.port-category').value = data.category;
-        items[index].querySelector('.port-link').value = data.project_link;
-        items[index].querySelector('.port-img-data').value = data.image_url;
-        items[index].querySelector('.port-preview').src = data.image_url;
-      }
-    });
+    // Load About, Stats & Contact
+    const { data: aboutData, error: aboutError } = await supabase.from('site_settings').select('*').eq('id', 1).single();
+    if (aboutError && aboutError.code !== 'PGRST116') throw aboutError; // PGRST116 is 'no rows returned'
+
+    if (aboutData) {
+      if (document.getElementById('about-heading')) document.getElementById('about-heading').value = aboutData.about_heading || '';
+      if (document.getElementById('about-p1')) document.getElementById('about-p1').value = aboutData.about_p1 || '';
+      if (document.getElementById('about-p2')) document.getElementById('about-p2').value = aboutData.about_p2 || '';
+      if (document.getElementById('stat-projects')) document.getElementById('stat-projects').value = aboutData.stat_projects || '';
+      if (document.getElementById('stat-fans')) document.getElementById('stat-fans').value = aboutData.stat_fans || '';
+      if (document.getElementById('contact-email')) document.getElementById('contact-email').value = aboutData.contact_email || '';
+      if (document.getElementById('contact-whatsapp')) document.getElementById('contact-whatsapp').value = aboutData.contact_whatsapp || '';
+      if (document.getElementById('contact-phone-display')) document.getElementById('contact-phone-display').value = aboutData.contact_phone || '';
+    }
+
+    // Load Portfolio
+    const { data: portfolioData, error: portError } = await supabase.from('portfolio').select('*').order('id');
+    if (portError) throw portError;
+
+    if (portfolioData) {
+      const items = document.querySelectorAll('.portfolio-cms-item');
+      portfolioData.forEach((data, index) => {
+        if (items[index]) {
+          items[index].querySelector('.port-title').value = data.title || '';
+          items[index].querySelector('.port-category').value = data.category || '';
+          items[index].querySelector('.port-link').value = data.project_link || '';
+          items[index].querySelector('.port-img-data').value = data.image_url || '';
+          items[index].querySelector('.port-preview').src = data.image_url || '';
+        }
+      });
+    }
+  } catch (err) {
+    console.error("Error loading data:", err);
   }
 }
 
