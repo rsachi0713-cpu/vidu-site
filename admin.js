@@ -189,8 +189,12 @@ window.saveAbout = async () => {
   };
 
   const { error } = await supabase.from('site_settings').upsert(data);
-  if (error) console.error('Error saving about:', error);
-  else notify("About & Stats Updated!");
+  if (error) {
+    console.error('Error saving about:', error);
+    alert('Error saving about: ' + error.message);
+  } else {
+    notify("About & Stats Updated!");
+  }
 }
 
 window.saveContact = async () => {
@@ -202,8 +206,12 @@ window.saveContact = async () => {
   };
 
   const { error } = await supabase.from('site_settings').upsert(data);
-  if (error) console.error('Error saving contact:', error);
-  else notify("Contact Info Updated!");
+  if (error) {
+    console.error('Error saving contact:', error);
+    alert('Error saving contact: ' + error.message);
+  } else {
+    notify("Contact Info Updated!");
+  }
 }
 
 // --- LOAD DATA ---
