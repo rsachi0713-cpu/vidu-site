@@ -2,6 +2,26 @@ import { supabase } from './supabase.js'
 
 console.log("Admin.js loaded");
 
+window.loginAdmin = () => {
+  const user = document.getElementById('admin-user').value;
+  const pass = document.getElementById('admin-pass').value;
+  
+  if (user === 'admin' && pass === 'admin123') {
+    document.getElementById('login-page').classList.add('hidden');
+    localStorage.setItem('adminLoggedIn', 'true');
+    loadAllData();
+  } else {
+    alert('Invalid Credentials!');
+  }
+}
+
+function checkLogin() {
+  if (localStorage.getItem('adminLoggedIn') === 'true') {
+    document.getElementById('login-page').classList.add('hidden');
+  }
+}
+
+
 // --- UTILS ---
 function notify(msg) {
   const toast = document.createElement('div');
@@ -284,4 +304,7 @@ async function loadAllData() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadAllData);
+document.addEventListener('DOMContentLoaded', () => {
+  checkLogin();
+  loadAllData();
+});
