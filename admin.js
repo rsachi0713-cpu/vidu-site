@@ -40,11 +40,16 @@ window.showTab = (tabId) => {
 
 // --- UTILS ---
 function notify(msg) {
+  console.log("Notification:", msg);
   const toast = document.createElement('div');
   toast.className = 'toast-notify';
-  toast.textContent = msg;
+  toast.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
   document.body.appendChild(toast);
+  
+  // Trigger animation
   setTimeout(() => toast.classList.add('show'), 100);
+  
+  // Remove after 3 seconds
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);

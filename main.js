@@ -99,7 +99,7 @@ async function loadCMSContent() {
 
     card.style.cursor = 'pointer';
     card.onclick = () => {
-      window.open(`service-detail.html?id=${item ? item.id : idx}`, '_blank');
+      window.location.href = `service-detail.html?id=${item ? item.id : idx}`;
     };
   });
 

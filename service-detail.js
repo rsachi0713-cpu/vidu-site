@@ -20,7 +20,6 @@ async function loadServiceDetail() {
 
     document.title = `${data.title} | MR VIDU`;
     document.getElementById('service-title').textContent = data.title;
-    document.getElementById('service-icon').innerHTML = `<i class="${data.icon_class}"></i>`;
     document.getElementById('service-short-desc').textContent = data.description;
     document.getElementById('service-full-desc').textContent = data.full_description || 'No detailed description available yet.';
 
