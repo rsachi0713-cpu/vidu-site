@@ -2,7 +2,19 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
-  plugins: [],
+  plugins: [
+    {
+      name: 'rewrite-admin',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url === '/admin') {
+            req.url = '/admin.html';
+          }
+          next();
+        });
+      }
+    }
+  ],
   build: {
     outDir: 'dist',
     rollupOptions: {

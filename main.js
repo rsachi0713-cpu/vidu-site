@@ -80,7 +80,9 @@ async function loadCMSContent() {
     
     if (document.getElementById('cms-contact-email')) document.getElementById('cms-contact-email').textContent = aboutData.contact_email;
     if (document.getElementById('cms-contact-phone')) document.getElementById('cms-contact-phone').textContent = aboutData.contact_phone;
-    if (document.getElementById('cms-whatsapp-link')) document.getElementById('cms-whatsapp-link').href = aboutData.whatsapp_link;
+    if (document.getElementById('cms-whatsapp-link')) {
+      document.getElementById('cms-whatsapp-link').href = aboutData.contact_whatsapp ? `https://wa.me/${aboutData.contact_whatsapp}` : '#';
+    }
   }
 
   // Load Services

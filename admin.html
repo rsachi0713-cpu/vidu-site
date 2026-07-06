@@ -204,17 +204,17 @@
       <h2 style="margin-bottom: 30px;">Admin <span class="text-red">Access</span></h2>
       <form onsubmit="event.preventDefault(); window.loginAdmin();">
         <div class="form-group">
-          <input type="text" id="admin-user" placeholder="Admin Username" value="admin" required>
+          <input type="text" id="admin-user" placeholder="Admin Username" required>
         </div>
         <div class="form-group">
-          <input type="password" id="admin-pass" placeholder="Password" value="admin123" required>
+          <input type="password" id="admin-pass" placeholder="Password" required>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%;">Enter Admin Panel</button>
       </form>
     </div>
   </div>
 
-  <div class="dashboard-container">
+  <div class="dashboard-container hidden">
     <!-- Sidebar -->
     <div class="sidebar">
       <div class="sidebar-logo">MR <span class="text-red">VIDU</span></div>
@@ -225,7 +225,7 @@
         <div class="menu-item" onclick="showTab('about')"><i class="fas fa-user-edit"></i> About Section</div>
         <div class="menu-item" onclick="showTab('portfolio')"><i class="fas fa-briefcase"></i> Portfolio</div>
         <div class="menu-item" onclick="showTab('contact')"><i class="fas fa-envelope"></i> Contact Info</div>
-        <a href="index.html" class="menu-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <div onclick="window.logoutAdmin()" class="menu-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Logout</div>
       </div>
     </div>
 
@@ -538,27 +538,29 @@
             <div class="form-grid">
               <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="port-title" value="Music Production">
+                <input type="text" class="port-title" id="port-title-1" value="Music Production">
               </div>
               <div class="form-group">
                 <label>Category</label>
-                <select class="port-category" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
+                <select class="port-category" id="port-cat-1" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
                   <option value="music">Music</option>
                   <option value="videos">Videos</option>
                   <option value="promotions">Promotions</option>
                 </select>
               </div>
+              <div class="form-grid full-width" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label>Link (URL)</label>
+                  <input type="text" class="port-link" id="port-link-1" value="#">
+                </div>
+                <div class="form-group">
+                  <label>Image</label>
+                  <input type="file" class="port-file" id="port-file-1" accept="image/*" onchange="previewPortfolioImage(this)">
+                  <input type="hidden" class="port-img-data" id="port-img-data-1" value="music_promotion_thumb.png">
+                </div>
+              </div>
               <div class="form-group full-width">
-                <label>Link (URL)</label>
-                <input type="text" class="port-link" value="#">
-              </div>
-              <div class="form-group">
-                <label>Image</label>
-                <input type="file" class="port-file" accept="image/*" onchange="previewPortfolioImage(this)">
-                <input type="hidden" class="port-img-data" value="music_promotion_thumb.png">
-              </div>
-              <div class="form-group">
-                <img class="port-preview" src="music_promotion_thumb.png" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                <img class="port-preview" id="port-preview-1" src="music_promotion_thumb.png" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid #222;">
               </div>
             </div>
           </div>
@@ -568,27 +570,29 @@
             <div class="form-grid">
               <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="port-title" value="Content Creation">
+                <input type="text" class="port-title" id="port-title-2" value="Content Creation">
               </div>
               <div class="form-group">
                 <label>Category</label>
-                <select class="port-category" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
+                <select class="port-category" id="port-cat-2" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
                   <option value="videos" selected>Videos</option>
                   <option value="music">Music</option>
                   <option value="promotions">Promotions</option>
                 </select>
               </div>
+              <div class="form-grid full-width" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label>Link (URL)</label>
+                  <input type="text" class="port-link" id="port-link-2" value="#">
+                </div>
+                <div class="form-group">
+                  <label>Image</label>
+                  <input type="file" class="port-file" id="port-file-2" accept="image/*" onchange="previewPortfolioImage(this)">
+                  <input type="hidden" class="port-img-data" id="port-img-data-2" value="content_creation_thumb.png">
+                </div>
+              </div>
               <div class="form-group full-width">
-                <label>Link (URL)</label>
-                <input type="text" class="port-link" value="#">
-              </div>
-              <div class="form-group">
-                <label>Image</label>
-                <input type="file" class="port-file" accept="image/*" onchange="previewPortfolioImage(this)">
-                <input type="hidden" class="port-img-data" value="content_creation_thumb.png">
-              </div>
-              <div class="form-group">
-                <img class="port-preview" src="content_creation_thumb.png" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                <img class="port-preview" id="port-preview-2" src="content_creation_thumb.png" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid #222;">
               </div>
             </div>
           </div>
@@ -598,27 +602,29 @@
             <div class="form-grid">
               <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="port-title" value="Band Promotion">
+                <input type="text" class="port-title" id="port-title-3" value="Band Promotion">
               </div>
               <div class="form-group">
                 <label>Category</label>
-                <select class="port-category" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
+                <select class="port-category" id="port-cat-3" style="width: 100%; background: #111; color: white; border: 1px solid #222; padding: 12px; border-radius: 8px;">
                   <option value="promotions" selected>Promotions</option>
                   <option value="music">Music</option>
                   <option value="videos">Videos</option>
                 </select>
               </div>
+              <div class="form-grid full-width" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label>Link (URL)</label>
+                  <input type="text" class="port-link" id="port-link-3" value="#">
+                </div>
+                <div class="form-group">
+                  <label>Image</label>
+                  <input type="file" class="port-file" id="port-file-3" accept="image/*" onchange="previewPortfolioImage(this)">
+                  <input type="hidden" class="port-img-data" id="port-img-data-3" value="music_promotion_thumb.png">
+                </div>
+              </div>
               <div class="form-group full-width">
-                <label>Link (URL)</label>
-                <input type="text" class="port-link" value="#">
-              </div>
-              <div class="form-group">
-                <label>Image</label>
-                <input type="file" class="port-file" accept="image/*" onchange="previewPortfolioImage(this)">
-                <input type="hidden" class="port-img-data" value="music_promotion_thumb.png">
-              </div>
-              <div class="form-group">
-                <img class="port-preview" src="music_promotion_thumb.png" style="width: 100%; height: 100px; object-fit: cover; border-radius: 10px;">
+                <img class="port-preview" id="port-preview-3" src="music_promotion_thumb.png" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid #222;">
               </div>
             </div>
           </div>

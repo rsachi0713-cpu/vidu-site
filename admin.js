@@ -6,8 +6,9 @@ window.loginAdmin = () => {
   const user = document.getElementById('admin-user').value;
   const pass = document.getElementById('admin-pass').value;
   
-  if (user === 'admin' && pass === 'admin123') {
+  if (user === 'vidu2026' && pass === 'vidu2026') {
     document.getElementById('login-page').classList.add('hidden');
+    document.querySelector('.dashboard-container').classList.remove('hidden');
     localStorage.setItem('adminLoggedIn', 'true');
     loadAllData();
   } else {
@@ -18,7 +19,16 @@ window.loginAdmin = () => {
 function checkLogin() {
   if (localStorage.getItem('adminLoggedIn') === 'true') {
     document.getElementById('login-page').classList.add('hidden');
+    document.querySelector('.dashboard-container').classList.remove('hidden');
+  } else {
+    document.getElementById('login-page').classList.remove('hidden');
+    document.querySelector('.dashboard-container').classList.add('hidden');
   }
+}
+
+window.logoutAdmin = () => {
+  localStorage.removeItem('adminLoggedIn');
+  checkLogin();
 }
 
 window.showTab = (tabId) => {
@@ -326,6 +336,21 @@ async function loadAllData() {
 
   } catch (err) {
     console.error("Load All Data Error:", err);
+  }
+}
+
+window.previewImage = (i) => {
+  const fileInput = document.getElementById(`ch${i}-file`);
+  const preview = document.getElementById(`ch${i}-preview`);
+  if (fileInput && fileInput.files[0] && preview) {
+    preview.src = URL.createObjectURL(fileInput.files[0]);
+  }
+}
+
+window.previewPortfolioImage = (input) => {
+  const preview = input.closest('.form-grid').querySelector('.port-preview');
+  if (input.files[0] && preview) {
+    preview.src = URL.createObjectURL(input.files[0]);
   }
 }
 
