@@ -355,7 +355,7 @@ window.previewImage = (i) => {
 }
 
 window.previewPortfolioImage = (input) => {
-  const preview = input.closest('.form-grid').querySelector('.port-preview');
+  const preview = input.closest('.portfolio-cms-item').querySelector('.port-preview');
   if (input.files[0] && preview) {
     preview.src = URL.createObjectURL(input.files[0]);
   }

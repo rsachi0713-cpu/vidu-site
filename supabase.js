@@ -1,4 +1,4 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || 'https://lcucegmqnibaqvyjjqls.supabase.co'
 const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || 'sb_publishable_-EJIAbYMDgqD2ZP4gkJbPA_LBDUj1we'

@@ -121,7 +121,9 @@
   <!-- Hero Section -->
   <section class="hero" id="home">
     <div class="hero-image" data-aos="fade-right">
-      <img src="mr_vidu_profile.png" alt="MR VIDU">
+      <div class="hero-image-inner">
+        <img src="mr_vidu_profile.png" alt="MR VIDU">
+      </div>
     </div>
     <div class="hero-content" data-aos="fade-left">
       <h1>Hi, I'm <span class="text-red glow-text">MR VIDU</span></h1>
@@ -174,26 +176,26 @@
         <p id="cms-fb-subs">10K+ Followers</p>
         <a id="cms-fb-link" href="#" class="btn btn-outline">Visit</a>
       </div>
-      <!-- Instagram -->
-      <div class="social-card" data-aos="zoom-in" data-aos-delay="400">
-        <i class="fab fa-instagram"></i>
-        <h3 id="cms-ig-name">Instagram</h3>
-        <p id="cms-ig-subs">20K+ Followers</p>
-        <a id="cms-ig-link" href="#" class="btn btn-outline">Visit</a>
-      </div>
       <!-- TikTok -->
-      <div class="social-card" data-aos="zoom-in" data-aos-delay="500">
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="400">
         <i class="fab fa-tiktok"></i>
         <h3 id="cms-tt-name">TikTok</h3>
         <p id="cms-tt-subs">150K+ Followers</p>
         <a id="cms-tt-link" href="#" class="btn btn-outline">Visit</a>
       </div>
       <!-- TikTok 2 -->
-      <div class="social-card" data-aos="zoom-in" data-aos-delay="600">
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="500">
         <i class="fab fa-tiktok"></i>
         <h3 id="cms-tt2-name">TikTok 2</h3>
         <p id="cms-tt2-subs">0 Followers</p>
         <a id="cms-tt2-link" href="#" class="btn btn-outline">Visit</a>
+      </div>
+      <!-- Instagram -->
+      <div class="social-card" data-aos="zoom-in" data-aos-delay="600">
+        <i class="fab fa-instagram"></i>
+        <h3 id="cms-ig-name">Instagram</h3>
+        <p id="cms-ig-subs">20K+ Followers</p>
+        <a id="cms-ig-link" href="#" class="btn btn-outline">Visit</a>
       </div>
     </div>
   </section>
@@ -246,10 +248,12 @@
     <h2 style="text-align: center; margin-bottom: 30px;" data-aos="fade-up">Featured <span class="text-red">Work</span></h2>
     
     <!-- Portfolio Filters -->
-    <div class="portfolio-filters" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;" data-aos="fade-up">
+    <div class="portfolio-filters" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; flex-wrap: wrap;" data-aos="fade-up">
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="music">Music</button>
       <button class="filter-btn" data-filter="videos">Videos</button>
+      <button class="filter-btn" data-filter="vlog">Vlog</button>
+      <button class="filter-btn" data-filter="roasting">Roasting</button>
       <button class="filter-btn" data-filter="promotions">Promotions</button>
     </div>
 

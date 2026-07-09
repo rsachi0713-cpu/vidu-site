@@ -21,6 +21,7 @@ export default defineConfig({
       input: {
         main: resolve(process.cwd(), 'index.html'),
         admin: resolve(process.cwd(), 'admin.html'),
+        serviceDetail: resolve(process.cwd(), 'service-detail.html'),
       },
     },
   },

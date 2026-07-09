@@ -211,10 +211,17 @@ nav.sticky {
 
 .hero-image {
   flex: 1;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.hero-image img {
+.hero-image-inner {
+  position: relative;
+  width: fit-content;
+}
+
+.hero-image-inner img {
   border-radius: 30px;
   box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
   border: 1px solid rgba(255, 0, 0, 0.2);
@@ -223,7 +230,7 @@ nav.sticky {
   z-index: 2;
 }
 
-.hero-image::before {
+.hero-image-inner::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -237,7 +244,7 @@ nav.sticky {
   filter: blur(15px);
 }
 
-.hero-image:hover img {
+.hero-image-inner:hover img {
   filter: grayscale(0);
   transform: scale(1.02);
 }
