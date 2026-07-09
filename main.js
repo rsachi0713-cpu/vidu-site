@@ -54,7 +54,7 @@ async function loadCMSContent() {
           if (document.getElementById('cms-social-yt-footer')) document.getElementById('cms-social-yt-footer').href = item.profile_link;
         }
       } else {
-        const map = { 4: 'fb', 5: 'ig', 6: 'tt' };
+        const map = { 4: 'fb', 5: 'ig', 6: 'tt', 7: 'tt2' };
         const prefix = map[item.id];
         if (prefix) {
           if (document.getElementById(`cms-${prefix}-name`)) document.getElementById(`cms-${prefix}-name`).textContent = item.display_name;
@@ -87,23 +87,36 @@ async function loadCMSContent() {
 
   // Load Services
   const { data: servicesData } = await supabase.from('services').select('*').order('id');
-  const serviceCards = document.querySelectorAll('.service-card');
-  
-  serviceCards.forEach((card, index) => {
-    const item = servicesData ? servicesData[index] : null;
-    const idx = index + 1;
+  const servicesGrid = document.getElementById('services-grid');
+  if (servicesGrid && servicesData) {
+    servicesGrid.innerHTML = '';
+    servicesData.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'service-card';
+      card.setAttribute('data-aos', 'fade-right');
+      if (index > 0) {
+        card.setAttribute('data-aos-delay', (index * 100).toString());
+      }
+      card.style.cursor = 'pointer';
+      
+      card.innerHTML = `
+        <i class="${item.icon_class || 'fas fa-cog'}"></i>
+        <h3>${item.title || ''}</h3>
+        <p>${item.description || ''}</p>
+      `;
+      
+      card.onclick = () => {
+        window.location.href = `service-detail.html?id=${item.id}`;
+      };
+      
+      servicesGrid.appendChild(card);
+    });
     
-    if (item) {
-      if (document.getElementById(`cms-service-title-${idx}`)) document.getElementById(`cms-service-title-${idx}`).textContent = item.title;
-      if (document.getElementById(`cms-service-desc-${idx}`)) document.getElementById(`cms-service-desc-${idx}`).textContent = item.description;
-      if (document.getElementById(`cms-service-icon-${idx}`)) document.getElementById(`cms-service-icon-${idx}`).className = item.icon_class;
+    // Refresh AOS animations
+    if (typeof AOS !== 'undefined' && AOS.refresh) {
+      AOS.refresh();
     }
-
-    card.style.cursor = 'pointer';
-    card.onclick = () => {
-      window.location.href = `service-detail.html?id=${item ? item.id : idx}`;
-    };
-  });
+  }
 
   // Load Portfolio
   const { data: portfolioData } = await supabase.from('portfolio').select('*').order('id');

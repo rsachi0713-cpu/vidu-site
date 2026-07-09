@@ -235,106 +235,17 @@
         <h2 style="margin-bottom: 30px;">Services <span class="text-red">Management</span></h2>
         
         <div id="services-items">
-          <!-- Service Item 1 -->
-          <div class="cms-card service-cms-item" data-id="1">
-            <h3>Service Item 1</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="service-title" value="Music Promotion">
-              </div>
-              <div class="form-group">
-                <label>Icon Class (FontAwesome)</label>
-                <input type="text" class="service-icon" value="fas fa-music">
-              </div>
-              <div class="form-group full-width">
-                <label>Short Description</label>
-                <textarea class="service-desc" rows="2"></textarea>
-              </div>
-              <div class="form-group full-width">
-                <label>Full Service Details (Shown on separate page)</label>
-                <textarea class="service-full-desc" rows="5"></textarea>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Service Item 2 -->
-          <div class="cms-card service-cms-item" data-id="2">
-            <h3>Service Item 2</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="service-title" value="Band Promotion">
-              </div>
-              <div class="form-group">
-                <label>Icon Class (FontAwesome)</label>
-                <input type="text" class="service-icon" value="fas fa-users">
-              </div>
-              <div class="form-group full-width">
-                <label>Short Description</label>
-                <textarea class="service-desc" rows="2"></textarea>
-              </div>
-              <div class="form-group full-width">
-                <label>Full Service Details (Shown on separate page)</label>
-                <textarea class="service-full-desc" rows="5"></textarea>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Service Item 3 -->
-          <div class="cms-card service-cms-item" data-id="3">
-            <h3>Service Item 3</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="service-title" value="Content Creation">
-              </div>
-              <div class="form-group">
-                <label>Icon Class (FontAwesome)</label>
-                <input type="text" class="service-icon" value="fas fa-video">
-              </div>
-              <div class="form-group full-width">
-                <label>Short Description</label>
-                <textarea class="service-desc" rows="2"></textarea>
-              </div>
-              <div class="form-group full-width">
-                <label>Full Service Details (Shown on separate page)</label>
-                <textarea class="service-full-desc" rows="5"></textarea>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Service Item 4 -->
-          <div class="cms-card service-cms-item" data-id="4">
-            <h3>Service Item 4</h3>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="service-title" value="Social Media Growth">
-              </div>
-              <div class="form-group">
-                <label>Icon Class (FontAwesome)</label>
-                <input type="text" class="service-icon" value="fas fa-chart-line">
-              </div>
-              <div class="form-group full-width">
-                <label>Short Description</label>
-                <textarea class="service-desc" rows="2"></textarea>
-              </div>
-              <div class="form-group full-width">
-                <label>Full Service Details (Shown on separate page)</label>
-                <textarea class="service-full-desc" rows="5"></textarea>
-              </div>
-
-            </div>
-          </div>
+          <!-- Service Items will be loaded dynamically from Supabase -->
         </div>
 
-        <button class="btn-save" onclick="saveServices()">
-          <i class="fas fa-save"></i> Save Services Settings
-        </button>
+        <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+          <button class="btn-save" onclick="saveServices()" style="margin-top: 0;">
+            <i class="fas fa-save"></i> Save Services Settings
+          </button>
+          <button class="btn-save" onclick="addServiceField()" style="margin-top: 0; background: #25D366; box-shadow: 0 0 10px rgba(37, 211, 102, 0.4);">
+            <i class="fas fa-plus"></i> Add New Service
+          </button>
+        </div>
       </div>
 
       <div id="tab-socials" class="tab-content hidden">
@@ -393,6 +304,25 @@
             <div class="form-group full-width">
               <label>Profile Link</label>
               <input type="text" id="tt-link" value="#">
+            </div>
+          </div>
+        </div>
+
+        <!-- TikTok 2 -->
+        <div class="cms-card">
+          <h3><i class="fab fa-tiktok" style="color: #fff;"></i> TikTok 2</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Display Name</label>
+              <input type="text" id="tt2-name" value="TikTok 2">
+            </div>
+            <div class="form-group">
+              <label>Followers Count</label>
+              <input type="text" id="tt2-subs" value="0 Followers">
+            </div>
+            <div class="form-group full-width">
+              <label>Profile Link</label>
+              <input type="text" id="tt2-link" value="#">
             </div>
           </div>
         </div>

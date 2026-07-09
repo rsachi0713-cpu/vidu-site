@@ -126,8 +126,8 @@ window.saveChannels = async () => {
 
 window.saveSocials = async () => {
   try {
-    const socials = ['fb', 'ig', 'tt'];
-    const platforms = { fb: 'Facebook', ig: 'Instagram', tt: 'TikTok' };
+    const socials = ['fb', 'ig', 'tt', 'tt2'];
+    const platforms = { fb: 'Facebook', ig: 'Instagram', tt: 'TikTok', tt2: 'TikTok' };
     
     for (const s of socials) {
       const name = document.getElementById(`${s}-name`).value;
@@ -190,19 +190,30 @@ window.saveServices = async () => {
   try {
     const items = [];
     document.querySelectorAll('.service-cms-item').forEach(card => {
-      items.push({
-        id: parseInt(card.dataset.id),
-        title: card.querySelector('.service-title').value,
-        icon_class: card.querySelector('.service-icon').value,
-        description: card.querySelector('.service-desc').value,
-        full_description: card.querySelector('.service-full-desc').value
-      });
+      const id = card.dataset.id ? parseInt(card.dataset.id) : null;
+      const title = card.querySelector('.service-title').value;
+      const icon_class = card.querySelector('.service-icon').value;
+      const description = card.querySelector('.service-desc').value;
+      const full_description = card.querySelector('.service-full-desc').value;
+      
+      const item = {
+        title,
+        icon_class,
+        description,
+        full_description
+      };
+      
+      if (id) {
+        item.id = id;
+      }
+      items.push(item);
     });
 
     console.log("Saving Services:", items);
     const { error } = await supabase.from('services').upsert(items);
     if (error) throw error;
     notify("Services Updated!");
+    await loadAllData();
   } catch (err) {
     console.error("Save Services Error:", err);
     alert("Failed to save services: " + err.message);
@@ -271,7 +282,7 @@ async function loadAllData() {
             }
           }
         } else {
-          const map = { 4: 'fb', 5: 'ig', 6: 'tt' };
+          const map = { 4: 'fb', 5: 'ig', 6: 'tt', 7: 'tt2' };
           const prefix = map[item.id];
           if (prefix && document.getElementById(`${prefix}-name`)) {
             document.getElementById(`${prefix}-name`).value = item.display_name || '';
@@ -286,18 +297,14 @@ async function loadAllData() {
     const { data: servicesData, error: servicesError } = await supabase.from('services').select('*').order('id');
     if (servicesError) throw servicesError;
 
-    if (servicesData) {
-      const items = document.querySelectorAll('.service-cms-item');
-      servicesData.forEach((data, index) => {
-        if (items[index]) {
-          items[index].querySelector('.service-title').value = data.title || '';
-          items[index].querySelector('.service-icon').value = data.icon_class || '';
-          items[index].querySelector('.service-desc').value = data.description || '';
-          if (items[index].querySelector('.service-full-desc')) {
-            items[index].querySelector('.service-full-desc').value = data.full_description || '';
-          }
-        }
-      });
+    const servicesContainer = document.getElementById('services-items');
+    if (servicesContainer) {
+      servicesContainer.innerHTML = '';
+      if (servicesData) {
+        servicesData.forEach((data) => {
+          renderServiceCMSItem(data);
+        });
+      }
     }
 
     // Load Portfolio
@@ -353,6 +360,72 @@ window.previewPortfolioImage = (input) => {
     preview.src = URL.createObjectURL(input.files[0]);
   }
 }
+
+function renderServiceCMSItem(data) {
+  const container = document.getElementById('services-items');
+  if (!container) return;
+
+  const itemDiv = document.createElement('div');
+  itemDiv.className = 'cms-card service-cms-item';
+  itemDiv.dataset.id = data.id || '';
+
+  itemDiv.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #1a1a1a; padding-bottom: 15px;">
+      <h3 style="margin-bottom: 0; border: none; padding: 0;">Service Item: <span class="service-title-span">${data.title || 'New Service'}</span></h3>
+      <button class="btn-delete-service" onclick="deleteService(${data.id || 0}, this)" style="background: transparent; color: #ff3333; border: 1px solid #ff3333; padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
+        <i class="fas fa-trash-alt"></i> Delete
+      </button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="service-title" value="${data.title || ''}" oninput="this.closest('.service-cms-item').querySelector('.service-title-span').textContent = this.value || 'New Service'">
+      </div>
+      <div class="form-group">
+        <label>Icon Class (FontAwesome)</label>
+        <input type="text" class="service-icon" value="${data.icon_class || 'fas fa-cog'}">
+      </div>
+      <div class="form-group full-width">
+        <label>Short Description</label>
+        <textarea class="service-desc" rows="2">${data.description || ''}</textarea>
+      </div>
+      <div class="form-group full-width">
+        <label>Full Service Details (Shown on separate page)</label>
+        <textarea class="service-full-desc" rows="5">${data.full_description || ''}</textarea>
+      </div>
+    </div>
+  `;
+  container.appendChild(itemDiv);
+}
+
+window.addServiceField = () => {
+  renderServiceCMSItem({
+    title: 'New Service',
+    icon_class: 'fas fa-cog',
+    description: '',
+    full_description: ''
+  });
+};
+
+window.deleteService = async (id, buttonEl) => {
+  if (!confirm("Are you sure you want to delete this service?")) return;
+  
+  const cardEl = buttonEl.closest('.service-cms-item');
+  
+  if (id) {
+    try {
+      const { error } = await supabase.from('services').delete().eq('id', id);
+      if (error) throw error;
+      notify("Service deleted from database!");
+    } catch (err) {
+      console.error("Delete Service Error:", err);
+      alert("Failed to delete service: " + err.message);
+      return;
+    }
+  }
+  
+  cardEl.remove();
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   checkLogin();

@@ -43,7 +43,189 @@
       padding: 40px;
       border-radius: 20px;
       border: 1px solid #333;
-      white-space: pre-wrap;
+      width: 100%;
+    }
+    
+    /* Rate Card Styles */
+    .rate-card-section {
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    .section-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+      padding-bottom: 12px;
+    }
+    
+    .section-icon {
+      font-size: 24px;
+      color: var(--primary-color);
+      filter: drop-shadow(var(--neon-glow));
+    }
+    
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    
+    .rate-card-table {
+      background: rgba(20, 20, 20, 0.6);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    
+    .rate-card-header {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      padding: 20px 30px;
+      background: rgba(255, 0, 0, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+    
+    .rate-card-rows {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .rate-card-row {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      padding: 18px 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      align-items: center;
+      transition: var(--transition);
+    }
+    
+    .rate-card-row:last-child {
+      border-bottom: none;
+    }
+    
+    .rate-card-row:hover {
+      background: rgba(255, 0, 0, 0.03);
+      border-left: 3px solid var(--primary-color);
+      padding-left: 27px;
+    }
+    
+    .service-name {
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    
+    .row-brand-icon {
+      font-size: 18px;
+    }
+    
+    .duration-badge-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    
+    .duration-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+    
+    .price-val {
+      font-weight: 700;
+      color: #fff;
+      text-align: right;
+      font-size: 16px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Terms Styles */
+    .terms-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .term-item {
+      display: flex;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 20px 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      align-items: flex-start;
+      transition: var(--transition);
+    }
+    
+    .term-item:hover {
+      background: rgba(255, 0, 0, 0.02);
+      border-color: rgba(255, 0, 0, 0.1);
+      transform: translateX(5px);
+    }
+    
+    .term-num {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      color: var(--primary-color);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+    
+    .term-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-top: 3px;
+    }
+    
+    .term-raw {
+      padding-left: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .rate-card-header, .rate-card-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        text-align: left;
+        padding: 20px;
+      }
+      .rate-card-row:hover {
+        padding-left: 17px;
+      }
+      .price-val {
+        text-align: left;
+        margin-top: 5px;
+        font-size: 18px;
+        color: var(--primary-color);
+      }
+      .rate-card-header {
+        display: none;
+      }
     }
     
     .back-btn {
